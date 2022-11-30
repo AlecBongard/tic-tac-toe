@@ -1,0 +1,20 @@
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8fafc;
+}
+
+.board{
+    background-color: #f1b06d;
+    height: 600px;
+    width: 600px;
+    display: grid;
+    grid-template: repeat(3, 200px) / repeat(3, 200px);
+}
+
+.square{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
