@@ -1,16 +1,29 @@
 const squares = document.querySelectorAll(".square");
+const start = document.querySelector(".start");
+const xname = document.querySelector("#xname");
+const oname =document.querySelector("#oname");
+const infowrap = document.querySelector(".info-wrapper");
 
 //player factory function
-const Player = (side) => {
+const Player = (side, playerName) => {
     const _renderMove = square => {
         squares[square].textContent = Gameboard.board[square];
     };
+
+    let name = playerName;
 
     const move = (square) => {
         if(!Gameboard.board[square]){
             Gameboard.board[square] = side;
             _renderMove(square);
             
+
+            let win = Gamestate.checkState();
+
+            if(win){
+                console.log(win);
+            }
+
             //pass turn to other player
             if(side === "X"){
                 Gamestate.turn = "O";
@@ -22,6 +35,7 @@ const Player = (side) => {
 
     return {
         move,
+        name,
     };
 };
 
@@ -52,6 +66,7 @@ const Gameboard = (()=>{
 })();
 
 const Gamestate = (() => {
+    let notStarted = true;
     let turn = "X"
 
     const _getRows = () => {
@@ -105,22 +120,31 @@ const Gamestate = (() => {
         let win = _checkThree(rows) || _checkThree(cols) || _checkThree(diags);
 
         if(win){
-            console.log(win + " Wins");
+            return (win + " Wins");
         }else if(!(Gameboard.board.includes(null))){
-            console.log("Tie Game");
+            return "Tie Game";
         }else{
             return false;
         }
     }
 
     return {
+        notStarted,
         turn,
         checkState,
     };
 })()
 
 
-const xplayer = Player("X");
-const oplayer = Player("O");
+const xplayer = Player("X", null);
+const oplayer = Player("O", null);
 
+
+start.addEventListener("click", e =>{
+    e.preventDefault();
+    infowrap.classList.add("hidden");
+
+    xplayer.name = xname.value;
+    oplayer.name = oname.value;
+});
 
