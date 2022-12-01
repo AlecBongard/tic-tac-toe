@@ -1,3 +1,6 @@
+//note: X = black, O = white
+
+
 const squares = document.querySelectorAll(".square");
 const start = document.querySelector(".start");
 const xname = document.querySelector("#xname");
@@ -7,7 +10,17 @@ const infowrap = document.querySelector(".info-wrapper");
 //player factory function
 const Player = (side, playerName) => {
     const _renderMove = square => {
-        squares[square].textContent = Gameboard.board[square];
+
+        const stone = document.createElement('img');
+        stone.classList.add('stone');
+        
+        if(Gameboard.board[square] === "X"){
+            stone.src = "imgs/black_stone.png";
+        }else{
+            stone.src="imgs/white_stone.png";
+        }
+
+        squares[square].appendChild(stone);
     };
 
     let name = playerName;
@@ -120,7 +133,11 @@ const Gamestate = (() => {
         let win = _checkThree(rows) || _checkThree(cols) || _checkThree(diags);
 
         if(win){
-            return (win + " Wins");
+            if(win === "X"){
+                return xplayer.name + " Wins";
+            }else{
+                return oplayer.name + " Wins";
+            }
         }else if(!(Gameboard.board.includes(null))){
             return "Tie Game";
         }else{
