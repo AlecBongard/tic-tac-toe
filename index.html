@@ -9,7 +9,6 @@
 </head>
 <body>
     <div class="header">
-
     </div>
 
     <div class="wrapper">
@@ -18,18 +17,22 @@
                 <form action="" method="" id="game-settings">
 
                     <div class="fieldwrap">
-                        <label for="x-name">x-player's name:</label>
-                        <input type="text" name="x-name" id="xname" placeholder="Enter name for X">
+                        <label for="x-name">Black side name</label>
+                        <input type="text" name="x-name" id="xname" placeholder="Enter name">
                     </div>
 
                     <div class="fieldwrap">
-                        <label for="o-name">o-player's name:</label>
-                        <input type="text" name="o-name" id="oname" placeholder="Enter name for O">
+                        <label for="o-name">White side name</label>
+                        <input type="text" name="o-name" id="oname" placeholder="Enter name">
                     </div>
 
                     <button type="submit" class="start">Start Game</button>
                 </form>
             </div>
+        </div>
+
+        <div class="game-info">
+            <p class="turn-text"></p>
         </div>
 
         <div class="board">
@@ -46,9 +49,7 @@
             <div class="square c1"></div>
         </div>
 
-        <div class="gameInfo">
-            <p class="turn-text">X's Turn</p>
-        </div>
+        
     </div>
 
     <script src="script.js"></script>

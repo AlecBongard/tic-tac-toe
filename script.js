@@ -6,6 +6,7 @@ const start = document.querySelector(".start");
 const xname = document.querySelector("#xname");
 const oname =document.querySelector("#oname");
 const infowrap = document.querySelector(".info-wrapper");
+const turnText = document.querySelector(".turn-text");
 
 //player factory function
 const Player = (side, playerName) => {
@@ -40,8 +41,10 @@ const Player = (side, playerName) => {
             //pass turn to other player
             if(side === "X"){
                 Gamestate.turn = "O";
+                turnText.textContent = oplayer.name + "'s turn";
             } else{
                 Gamestate.turn = "X";
+                turnText.textContent = xplayer.name + "'s turn";
             }
         }
     };
@@ -59,9 +62,10 @@ const Gameboard = (()=>{
                     null, null, null];
 
     //lets player make a move by clicking the board
-    const _makeClickable = ()=>{
+    const _makeClickable = (()=>{
         for(let i=0; i < board.length;i++){
             squares[i].addEventListener("click", ()=>{
+                squares[i].textContent = "";
                 if(Gamestate.turn === "X"){
                     xplayer.move(i);
                 }else{
@@ -69,9 +73,29 @@ const Gameboard = (()=>{
                 }
             });
         }
-    }
+    })();
 
-    _makeClickable();
+    //add shadows when hovering over a square
+    const _addHover = (()=>{
+        const shadow = document.createElement("img");
+        shadow.classList.add("shadow");
+
+
+        for(let i=0;i<board.length;i++){
+            squares[i].addEventListener("mouseover", ()=>{
+
+                if(Gamestate.turn==="X"){
+                    shadow.src = "imgs/black_stone.png";
+                }else{
+                    shadow.src = "imgs/white_stone.png";
+                }
+
+                if(board[i]===null){
+                    squares[i].appendChild(shadow);
+                }
+            });
+        }
+    })();
 
     return {
         board,
@@ -161,7 +185,10 @@ start.addEventListener("click", e =>{
     e.preventDefault();
     infowrap.classList.add("hidden");
 
+
     xplayer.name = xname.value;
     oplayer.name = oname.value;
+
+    turnText.textContent = xplayer.name + "'s turn";
 });
 
