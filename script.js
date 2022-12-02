@@ -6,7 +6,9 @@ const start = document.querySelector(".start");
 const xname = document.querySelector("#xname");
 const oname =document.querySelector("#oname");
 const infowrap = document.querySelector(".info-wrapper");
+const gameInfo = document.querySelector(".game-info");
 const turnText = document.querySelector(".turn-text");
+const boardGrid = document.querySelector(".board");
 
 //player factory function
 const Player = (side, playerName) => {
@@ -28,6 +30,7 @@ const Player = (side, playerName) => {
 
     const move = (square) => {
         if(!Gameboard.board[square]){
+            squares[square].textContent = "";
             Gameboard.board[square] = side;
             _renderMove(square);
             
@@ -36,16 +39,19 @@ const Player = (side, playerName) => {
 
             if(win){
                 console.log(win);
+                turnText.textContent = win.toString();
+            }else{
+                //pass turn to other player
+                if(side === "X"){
+                    Gamestate.turn = "O";
+                    turnText.textContent = oplayer.name + "'s turn";
+                } else{
+                    Gamestate.turn = "X";
+                    turnText.textContent = xplayer.name + "'s turn";
+                }
             }
 
-            //pass turn to other player
-            if(side === "X"){
-                Gamestate.turn = "O";
-                turnText.textContent = oplayer.name + "'s turn";
-            } else{
-                Gamestate.turn = "X";
-                turnText.textContent = xplayer.name + "'s turn";
-            }
+            
         }
     };
 
@@ -65,15 +71,17 @@ const Gameboard = (()=>{
     const _makeClickable = (()=>{
         for(let i=0; i < board.length;i++){
             squares[i].addEventListener("click", ()=>{
-                squares[i].textContent = "";
-                if(Gamestate.turn === "X"){
-                    xplayer.move(i);
-                }else{
-                    oplayer.move(i);
+                if(!Gamestate.checkState()){ //doesn't allow moves if game is over
+                    if(Gamestate.turn === "X"){
+                        xplayer.move(i);
+                    }else{
+                        oplayer.move(i);
+                    }
                 }
             });
         }
     })();
+
 
     //add shadows when hovering over a square
     const _addHover = (()=>{
@@ -97,8 +105,31 @@ const Gameboard = (()=>{
         }
     })();
 
+    const _restart = ()=>{
+        for(let i=0;i<board.length;i++){
+            squares[i].textContent = "";
+            board[i] = null;
+        }
+        
+        
+    }
+
+    const playagain = () => {
+        const playAgain = document.createElement('p');
+        playAgain.id = "restart";
+        playAgain.textContent = "  Play again?";
+
+        gameInfo.appendChild(playAgain);
+
+        playAgain.addEventListener("click", ()=>{
+            gameInfo.removeChild(playAgain);
+            _restart();
+        });
+    }
+
     return {
         board,
+        playagain,
     }
 })();
 
@@ -149,6 +180,8 @@ const Gamestate = (() => {
     }
 
 
+
+
     const checkState = ()=>{
         let rows = _getRows();
         let cols = _getCols();
@@ -157,13 +190,18 @@ const Gamestate = (() => {
         let win = _checkThree(rows) || _checkThree(cols) || _checkThree(diags);
 
         if(win){
+            if(!document.getElementById("restart")){
+                Gameboard.playagain();
+            }
+
             if(win === "X"){
-                return xplayer.name + " Wins";
+                return xplayer.name + " wins.";
             }else{
-                return oplayer.name + " Wins";
+                return oplayer.name + " wins.";
             }
         }else if(!(Gameboard.board.includes(null))){
-            return "Tie Game";
+            Gameboard.playagain();
+            return "Tie Game.";
         }else{
             return false;
         }
@@ -183,12 +221,17 @@ const oplayer = Player("O", null);
 
 start.addEventListener("click", e =>{
     e.preventDefault();
-    infowrap.classList.add("hidden");
+    if(!(xname.value==="" || oname.value==="")){
+        infowrap.classList.add("hidden");
 
 
-    xplayer.name = xname.value;
-    oplayer.name = oname.value;
+        xplayer.name = xname.value;
+        oplayer.name = oname.value;
 
-    turnText.textContent = xplayer.name + "'s turn";
+        turnText.textContent = xplayer.name + "'s turn";
+    }else{
+        xname.classList.add("post-submit");
+        oname.classList.add("post-submit");
+    }
 });
 

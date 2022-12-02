@@ -113,6 +113,8 @@ form{
     display: flex;
     margin: 0 0 25px 0;
     box-shadow: 0px 2px 2px lightgrey;
+    align-items: center;
+    justify-content: center;
 }
 
 .stone{
@@ -145,4 +147,24 @@ form{
 
 .square:hover .shadow{
     display: block;
+}
+
+.post-submit:invalid{
+    border: 2px solid red;
+    border-radius: 5px;
+}
+
+#restart{
+    cursor: pointer;
+}
+
+.title-img{
+    height:90%;
+    width:auto;
+}
+
+.title{
+    font-weight:bolder;
+    font-size: 46px;
+    height:100%;
 }
