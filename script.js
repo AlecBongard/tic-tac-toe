@@ -156,7 +156,7 @@ const Gameboard = (()=>{
         Gamestate.turn = "X";
         const playAgain = document.createElement('p');
         playAgain.id = "restart";
-        playAgain.textContent = "  Play again?";
+        playAgain.textContent = "Play again.";
 
         gameInfo.appendChild(playAgain);
 
@@ -260,7 +260,7 @@ const oplayer = Player("O", null);
 
 start.addEventListener("click", e =>{
     e.preventDefault();
-    if(!(xname.value==="" || oname.value==="")){
+    if(!((xname.value==="" && !xname.disabled) || (oname.value==="" && !oname.disabled))){
         infowrap.classList.add("hidden");
 
 
@@ -269,8 +269,13 @@ start.addEventListener("click", e =>{
 
         turnText.textContent = xplayer.name + "'s turn";
     }else{
-        xname.classList.add("post-submit");
-        oname.classList.add("post-submit");
+
+        if(!xname.disabled){
+            xname.classList.add("post-submit");
+        }
+        if(!oname.disabled){
+            oname.classList.add("post-submit");
+        }
     }
 
     if(p2bot.checked){
@@ -280,5 +285,25 @@ start.addEventListener("click", e =>{
     if(p1bot.checked){
         xplayer.bot = true;
         setTimeout(()=>xplayer.botMove(), 250);
+    }
+});
+
+p2bot.addEventListener('click', ()=>{
+    if(p2bot.checked){
+        oname.disabled = true;
+        oname.value = "White Bot";
+    } else{
+        oname.disabled = false;
+        oname.value = "";
+    }
+});
+
+p1bot.addEventListener('click', ()=>{
+    if(p1bot.checked){
+        xname.disabled = true;
+        xname.value = "Black Bot";
+    } else{
+        xname.disabled = false;
+        xname.value = "";
     }
 });
