@@ -18,14 +18,22 @@
                 <form action="" method="" id="game-settings">
 
                     <div class="fieldwrap">
-                        <label for="x-name">Black side name</label>
+                        <label for="x-name">Player one name</label>
                         <input type="text" name="x-name" id="xname" placeholder="Enter name" required>
+                        <div class="bot">
+                            <input type="checkbox" name="p1bot" id="p1bot">
+                            <label for="p1bot">Make player one a bot</label>
+                        </div>
                     </div>
 
                     <div class="fieldwrap">
-                        <label for="o-name">White side name</label>
+                        <label for="o-name">Player two name</label>
                         <input type="text" name="o-name" id="oname" placeholder="Enter name" required>
-                    </div>
+                        <div class="bot">
+                            <input type="checkbox" name="p2bot" id="p2bot">
+                            <label for="p2bot">Make player two a bot</label>
+                        </div>
+                        </div>
 
                     <button type="submit" class="start">Start Game</button>
                 </form>

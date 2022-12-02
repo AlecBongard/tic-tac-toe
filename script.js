@@ -9,9 +9,14 @@ const infowrap = document.querySelector(".info-wrapper");
 const gameInfo = document.querySelector(".game-info");
 const turnText = document.querySelector(".turn-text");
 const boardGrid = document.querySelector(".board");
+const p2bot = document.querySelector("#p2bot");
+const p1bot = document.querySelector("#p1bot");
 
 //player factory function
 const Player = (side, playerName) => {
+    let bot = false; //determines whether player is a bot
+    let botDifficulty = "easy";
+
     const _renderMove = square => {
 
         const stone = document.createElement('img');
@@ -26,6 +31,26 @@ const Player = (side, playerName) => {
         squares[square].appendChild(stone);
     };
 
+    const _randMove = () => {
+        let valid = [];
+
+        for(let i=0;i<Gameboard.board.length;i++){
+            if(Gameboard.board[i] === null){
+                valid.push(i);
+            }
+        }
+
+        let chosen = valid[Math.floor(Math.random() * valid.length)];
+        move(chosen);
+    }
+
+    //Will determine which difficulty should be used when more difficulties are added
+    const botMove = () => {
+        if(botDifficulty === "easy"){
+            _randMove();
+        }
+    }
+
     let name = playerName;
 
     const move = (square) => {
@@ -38,16 +63,25 @@ const Player = (side, playerName) => {
             let win = Gamestate.checkState();
 
             if(win){
-                console.log(win);
                 turnText.textContent = win.toString();
             }else{
                 //pass turn to other player
                 if(side === "X"){
+                    
+
                     Gamestate.turn = "O";
                     turnText.textContent = oplayer.name + "'s turn";
+
+                    if(oplayer.bot){
+                        setTimeout(()=>oplayer.botMove(), 200);
+                    }
                 } else{
                     Gamestate.turn = "X";
                     turnText.textContent = xplayer.name + "'s turn";
+
+                    if(xplayer.bot){
+                        setTimeout(()=>xplayer.botMove(), 200);
+                    }
                 }
             }
 
@@ -57,6 +91,7 @@ const Player = (side, playerName) => {
 
     return {
         move,
+        botMove,
         name,
     };
 };
@@ -109,12 +144,16 @@ const Gameboard = (()=>{
         for(let i=0;i<board.length;i++){
             squares[i].textContent = "";
             board[i] = null;
+
         }
-        
-        
+
+        if(xplayer.bot){
+            setTimeout(()=>xplayer.botMove(), 250);
+        } 
     }
 
     const playagain = () => {
+        Gamestate.turn = "X";
         const playAgain = document.createElement('p');
         playAgain.id = "restart";
         playAgain.textContent = "  Play again?";
@@ -233,5 +272,13 @@ start.addEventListener("click", e =>{
         xname.classList.add("post-submit");
         oname.classList.add("post-submit");
     }
-});
 
+    if(p2bot.checked){
+        oplayer.bot = true;
+    }
+
+    if(p1bot.checked){
+        xplayer.bot = true;
+        setTimeout(()=>xplayer.botMove(), 250);
+    }
+});

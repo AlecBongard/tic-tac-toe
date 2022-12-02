@@ -168,3 +168,9 @@ form{
     font-size: 46px;
     height:100%;
 }
+
+.bot{
+    margin: 2px 0;
+    display: flex;
+    align-items: center;
+}
