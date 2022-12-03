@@ -156,7 +156,7 @@ const Gameboard = (()=>{
         Gamestate.turn = "X";
         const playAgain = document.createElement('p');
         playAgain.id = "restart";
-        playAgain.textContent = "Play again.";
+        playAgain.textContent = "Play again";
 
         gameInfo.appendChild(playAgain);
 
